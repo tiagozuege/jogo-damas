@@ -35,4 +35,5 @@ clean:
 	$(DEL) -f **/*.elf *.o **/*.o **/**/*.o iso/boot/*.elf *.img *.iso *.elf
 
 run: kernel.elf
-	qemu-system-i386 -kernel $< -monitor stdio
+	#qemu-system-i386 -kernel $< -monitor stdio
+	qemu-system-i386 -soundhw pcspk -serial stdio -kernel $<

@@ -1,4 +1,4 @@
-#Projeto II
+# Projeto II
 
 Desenvolver um jogo de tabuleiro do tipo damas para PC. O jogo deve ter
 interface semelhante à encontrada em `https://youtu.be/aTIq_8ncurs`. As regras
