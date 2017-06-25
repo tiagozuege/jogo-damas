@@ -115,8 +115,9 @@ void desenhaTela() {
 
   }
 
+  //Info do jogo
   puts(0, 1, YELLOW, GRAY, "Jogador:");
-  puts(9, 1, BLUE, GRAY, "AZUL");
+  puts(9, 1, BLUE, GRAY, "A");
   puts(0, 3, YELLOW, GRAY, "Score");
   puts(0, 4, YELLOW, GRAY, "---------");
   puts(0, 5, BLUE, GRAY, "Azul:");
@@ -127,6 +128,8 @@ void desenhaTela() {
 //Faz o desenho das posicoes iniciais das pecas
 //e tambem é utilizado para redesenhar pecas individuais
 //quando necessario
+//Se os argumentos x & y == 0 & cor = ' ' entao redesenha
+//todas as pecas
 void desenhaPecas(int x, int y, char cor) {
 
   if (x != 0 && y != 0) {
@@ -195,6 +198,20 @@ char verificaCor(int x, int y) {
     return cor;
   }
 
+  //Funcao que avalia se jogada a ser feita
+  //é valida ou nao.
+  //REGRAS:
+  //--> Pecas andam na diagonal, 1 casa para frente
+  //--> Peca que 'comeu' outra peca pula uma casa na diagonal
+  //--> Jogador que esta na vez nao pode selecionar peca de outra cor
+  int validaJogada(char cor) {
+
+    int ret = 0;
+
+
+    return -1;
+  }
+
 
 
 int kmain(void)
@@ -210,12 +227,12 @@ int kmain(void)
     x = 28;
     y = 5;
 
-    serial_init();    //inicializa a porta serial para 'escrever' no serial ( funcao prinft() )
+    serial_init();    //inicializa a porta serial para 'escrever' no terminal ( funcao prinft() )
 
     desenhaTela();
 
     desenhaPecas(0, 0, ' ');
-
+    printf("INICIO: Jogador => %d\n", jogada);
     // puts(1, 1, GREEN, GRAY, "Mensagem de teste 2...");    //puts(posX, posY, cor_frente, cor_fundo, str_a_ser_exibida)
 
     while (1) {
@@ -227,7 +244,7 @@ int kmain(void)
 
 
         int pecas[1][2] = {{0, 0}};
-		cor = verificaCor(x, y);
+    		cor = verificaCor(x, y);
 
         posAntX = x;
         posAntY = y;
@@ -239,65 +256,72 @@ int kmain(void)
       	desenhaPecas(posAntX, posAntY, cor);
         putc(x, y, GREEN, MAGENTA, "");
 
+        //Tecla enter seleciona a origem e destino da peca
+        //Enter (1) => seleciona a peca (MODO SELECAO)
+        //Enter (0) => seleciona o destino (MODO MOVIMENTO)
         if (key == KEY_ENTER) {
-          enter = 1 - enter;
-          if (enter == 1) {
-            x_sel = x; y_sel = y;
+          enter = 1 - enter;    //alterna entre 1 / 0
+
+          if (enter == 1) {   //se enter == 1 entao esta no modo SELECAO
+            x_sel = x; y_sel = y;   //pega a posicao da peca selecionada e gurda em x_sel e y_sel
             printf("[X,Y] selecionado: %d,%d\n", x_sel, y_sel);
-			}
+    			}
 
-		  int pecas[1][2] = {{x_sel, y_sel}};     //armazena peca a ser movida
+    		  int pecas[1][2] = {{x_sel, y_sel}};     //armazena em matriz peca a ser movida
 
-          if (enter == 0) {
-			  if (jogada == 0) {
+          if (enter == 0) {   //se enter == 0 entao esta no modo MOVIMENTO
 
-				for (int l = 0; l < 12; l++) {
-					for (int c = 0; c < 1; c++) {
-						if (pecasAzuis[l][c] == pecas[0][0] && pecasAzuis[l][c+1] == pecas[0][1]) {
-							pecasAzuis[l][c] = x;
-							pecasAzuis[l][c+1] = y;
-						}
-						printf("Matriz Azul: %d,%d\n", pecasAzuis[l][c], pecasAzuis[l][c+1]);
+    			  if (jogada == 0) {   //Se jogada == 0 -> vez do Azul
 
-				  }
-				}
-				printf("Matriz pecas: %d,%d\n", pecas[0][0], pecas[0][1]);
-				printf("[X,Y] atual: %d,%d\n", x, y);
-				desenhaPecas(0, 0, ' ');
-				desenhaPecas(x_sel, y_sel, 'C');
-				jogada = 1;
-        puts(9, 1, RED, GRAY, "VERMELHO");
-			  }
-			  if (jogada == 1) {
+      				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
+      					for (int c = 0; c < 1; c++) {
+      						if (pecasAzuis[l][c] == pecas[0][0] && pecasAzuis[l][c+1] == pecas[0][1]) {
+      							pecasAzuis[l][c] = x;
+      							pecasAzuis[l][c+1] = y;
+      						}
+      						// printf("Matriz Azul: %d,%d\n", pecasAzuis[l][c], pecasAzuis[l][c+1]);
+      				  }
+      				}
 
-			    for (int l = 0; l < 12; l++) {
-					for (int c = 0; c < 1; c++) {
-						if (pecasVermelhas[l][c] == pecas[0][0] && pecasVermelhas[l][c+1] == pecas[0][1]) {
-							pecasVermelhas[l][c] = x;
-							pecasVermelhas[l][c+1] = y;
-						}
-						printf("Matriz Vermelha: %d,%d\n", pecasVermelhas[l][c], pecasVermelhas[l][c+1]);
+      				// printf("Matriz pecas: %d,%d\n", pecas[0][0], pecas[0][1]);
+      				// printf("[X,Y] atual: %d,%d\n", x, y);
+      				desenhaPecas(0, 0, ' ');    //redesenha as pecas de acordo com a matriz atualizada
+      				desenhaPecas(x_sel, y_sel, 'C');  //desenha posicao da peca que se moveu em cinza
+      				// jogada = 1;   //troca de jogador
+              putc(9, 1, GRAY, GRAY, "");
+              puts(9, 1, RED, GRAY, "V");
+      			  }
+      			  if (jogada == 1) {
+      			    for (int l = 0; l < 12; l++) {
+        					for (int c = 0; c < 1; c++) {
+        						if (pecasVermelhas[l][c] == pecas[0][0] && pecasVermelhas[l][c+1] == pecas[0][1]) {
+        							pecasVermelhas[l][c] = x;
+        							pecasVermelhas[l][c+1] = y;
+        						}
+        						// printf("Matriz Vermelha: %d,%d\n", pecasVermelhas[l][c], pecasVermelhas[l][c+1]);
 
-				  }
-				}
-				printf("Matriz pecas: %d,%d\n", pecas[0][0], pecas[0][1]);
-				printf("[X,Y] atual: %d,%d\n", x, y);
-				desenhaPecas(0, 0, ' ');
-				desenhaPecas(x_sel, y_sel, 'C');
-				jogada = 0;
-        puts(9, 1, BLUE, GRAY, "AZUL");
-			  }
+        				  }
+        				}
+
+        				// printf("Matriz pecas: %d,%d\n", pecas[0][0], pecas[0][1]);
+        				// printf("[X,Y] atual: %d,%d\n", x, y);
+        				desenhaPecas(0, 0, ' ');
+        				desenhaPecas(x_sel, y_sel, 'C');
+        				// jogada = 0;   //troca de jogador
+                putc(9, 1, GRAY, GRAY, "");
+                puts(9, 1, BLUE, GRAY, "A");
+      			  }
+
+              jogada = 1 - jogada;
+              printf("Jogador => %d\n", jogada);
           }
-          // printf("[X,Y] selecionado: %d,%d\n", x_sel, y_sel);
-          // printf("[X,Y] anterior: %d,%d\n", aux_x, aux_y);
-          // printf("[X,Y] atual: %d,%d\n", x, y);
-          putc(15, 15, GRAY, MAGENTA, cor);
 
+          putc(15, 15, GRAY, MAGENTA, cor);   //Teste para ver a cor que esta selecionando
         }
 
 
-        desenhaPecas(posAntX, posAntY, cor);
-        putc(x, y, GREEN, MAGENTA, "");
+        desenhaPecas(posAntX, posAntY, cor);  //necessario para redesenhar onde cursor passou
+        putc(x, y, GREEN, MAGENTA, "");       //coloca o cursor na posicao selecionada
 
 		}
 
