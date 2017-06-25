@@ -15,5 +15,5 @@ static inline void outb(unsigned short port, unsigned char data)
     asm("outb %1, %0" : : "dN" (port), "a" (data));
 }
 
-#endif // IO_H
+#endif /* IO_H */
 

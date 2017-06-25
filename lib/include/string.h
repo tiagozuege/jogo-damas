@@ -5,5 +5,5 @@ extern void *memset(void *dst, int c, int n);
 
 extern void strcpy(const char *src, char *dst);
 
-#endif //STRING_H
+#endif /* STRING_H */
 

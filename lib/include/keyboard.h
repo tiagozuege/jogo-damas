@@ -15,5 +15,5 @@
 
 extern int getkey(void);
 
-#endif // KEYBOARD_H
+#endif /* KEYBOARD_H */
 

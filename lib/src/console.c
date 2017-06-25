@@ -10,8 +10,17 @@ void putc(int x, int y, enum color fg, enum color bg, char c)
 
 void puts(int x, int y, enum color fg, enum color bg, const char *s)
 {
-    for (; *s; s++, x++)
+    int px = x;
+
+    for (; *s; s++, x++) {
+        if (*s == '\n') {
+            y++;
+            x = px;
+            continue;
+        }
+
         putc(x, y, fg, bg, *s);
+    }
 }
 
 void clear(enum color bg)

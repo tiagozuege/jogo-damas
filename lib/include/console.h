@@ -10,6 +10,7 @@
 
 #define TABULEIRO_X             52    //limite da posicao x
 #define TABULEIRO_Y             19
+
 enum color {
     BLACK,
     BLUE,
@@ -28,4 +29,4 @@ extern void puts(int x, int y, enum color fg, enum color bg, const char *s);
 
 extern void clear(enum color bg);
 
-#endif // CONSOLE_H
+#endif /* CONSOLE_H */
