@@ -200,16 +200,33 @@ char verificaCor(int x, int y) {
 
   //Funcao que avalia se jogada a ser feita
   //é valida ou nao.
+  //x0 & y0 --> ponto de partida da peca
+  //x1 & y1 --> casa de destino da peca
   //REGRAS:
   //--> Pecas andam na diagonal, 1 casa para frente
   //--> Peca que 'comeu' outra peca pula uma casa na diagonal
   //--> Jogador que esta na vez nao pode selecionar peca de outra cor
-  int validaJogada(char cor) {
+  //--> Jogador = 0 [Azul] / Jogador = 1 [Vermelho]
+  //Retorna 1 se jogada valida [true] e 0 se jogada invalida [false]
+  int validaJogada(char cor, int x0, int x1, int y0, int y1, int jogador) {
 
-    int ret = 0;
+    if (jogador == 0 && cor == 'A') {
+      if ( (x0 - x1) == 4 || (x0 - x1) == -4 ) {
+        if ( (y0 - y1) == -2 ) {
+          return 1;
+        }
+      }
+    }
 
+    if (jogador == 1 && cor == 'V') {
+      if ( (x0 - x1) == 4 || (x0 - x1) == -4 ) {
+        if ( (y0 - y1) == 2 ) {
+          return 1;
+        }
+      }
+    }
 
-    return -1;
+    return 0;   //Nenhuma condicao valida entao retorna 0
   }
 
 
@@ -220,6 +237,7 @@ int kmain(void)
     int x, y, posAntX, posAntY, x_sel, y_sel;
     int key;
     char cor = ' ';
+    char cor_sel = ' ';
     int found = -1;
     int enter = 0;    //Enter pressionado 1x = 1;
 
@@ -264,13 +282,17 @@ int kmain(void)
 
           if (enter == 1) {   //se enter == 1 entao esta no modo SELECAO
             x_sel = x; y_sel = y;   //pega a posicao da peca selecionada e gurda em x_sel e y_sel
+            cor_sel = verificaCor(x_sel, y_sel);
             printf("[X,Y] selecionado: %d,%d\n", x_sel, y_sel);
     			}
 
     		  int pecas[1][2] = {{x_sel, y_sel}};     //armazena em matriz peca a ser movida
 
           if (enter == 0) {   //se enter == 0 entao esta no modo MOVIMENTO
-
+            if ( validaJogada(cor_sel, x_sel, x, y_sel, y, jogada) == 0 ) {
+              // printf("Cor:%c\nx_sel:%d\nx:%d\ny_sel:%d\ny:%d\njogador:%d\n", cor_sel, x_sel, x, y_sel, y, jogada);
+              puts(1, 23, MAGENTA, GRAY, "ERRO!");
+            }
     			  if (jogada == 0) {   //Se jogada == 0 -> vez do Azul
 
       				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
