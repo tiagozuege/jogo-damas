@@ -284,6 +284,7 @@ int kmain(void)
             x_sel = x; y_sel = y;   //pega a posicao da peca selecionada e gurda em x_sel e y_sel
             cor_sel = verificaCor(x_sel, y_sel);
             printf("[X,Y] selecionado: %d,%d\n", x_sel, y_sel);
+            puts(1, 23, GRAY, GRAY, "                  ");
     			}
 
     		  int pecas[1][2] = {{x_sel, y_sel}};     //armazena em matriz peca a ser movida
@@ -291,51 +292,53 @@ int kmain(void)
           if (enter == 0) {   //se enter == 0 entao esta no modo MOVIMENTO
             if ( validaJogada(cor_sel, x_sel, x, y_sel, y, jogada) == 0 ) {
               // printf("Cor:%c\nx_sel:%d\nx:%d\ny_sel:%d\ny:%d\njogador:%d\n", cor_sel, x_sel, x, y_sel, y, jogada);
-              puts(1, 23, MAGENTA, GRAY, "ERRO!");
+              puts(1, 23, MAGENTA, GRAY, "Jogada Invalida!!");
             }
-    			  if (jogada == 0) {   //Se jogada == 0 -> vez do Azul
+            else {
+      			  if (jogada == 0) {   //Se jogada == 0 -> vez do Azul
 
-      				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
-      					for (int c = 0; c < 1; c++) {
-      						if (pecasAzuis[l][c] == pecas[0][0] && pecasAzuis[l][c+1] == pecas[0][1]) {
-      							pecasAzuis[l][c] = x;
-      							pecasAzuis[l][c+1] = y;
-      						}
-      						// printf("Matriz Azul: %d,%d\n", pecasAzuis[l][c], pecasAzuis[l][c+1]);
-      				  }
-      				}
-
-      				// printf("Matriz pecas: %d,%d\n", pecas[0][0], pecas[0][1]);
-      				// printf("[X,Y] atual: %d,%d\n", x, y);
-      				desenhaPecas(0, 0, ' ');    //redesenha as pecas de acordo com a matriz atualizada
-      				desenhaPecas(x_sel, y_sel, 'C');  //desenha posicao da peca que se moveu em cinza
-      				// jogada = 1;   //troca de jogador
-              putc(9, 1, GRAY, GRAY, "");
-              puts(9, 1, RED, GRAY, "V");
-      			  }
-      			  if (jogada == 1) {
-      			    for (int l = 0; l < 12; l++) {
+        				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
         					for (int c = 0; c < 1; c++) {
-        						if (pecasVermelhas[l][c] == pecas[0][0] && pecasVermelhas[l][c+1] == pecas[0][1]) {
-        							pecasVermelhas[l][c] = x;
-        							pecasVermelhas[l][c+1] = y;
+        						if (pecasAzuis[l][c] == pecas[0][0] && pecasAzuis[l][c+1] == pecas[0][1]) {
+        							pecasAzuis[l][c] = x;
+        							pecasAzuis[l][c+1] = y;
         						}
-        						// printf("Matriz Vermelha: %d,%d\n", pecasVermelhas[l][c], pecasVermelhas[l][c+1]);
-
+        						// printf("Matriz Azul: %d,%d\n", pecasAzuis[l][c], pecasAzuis[l][c+1]);
         				  }
         				}
 
         				// printf("Matriz pecas: %d,%d\n", pecas[0][0], pecas[0][1]);
         				// printf("[X,Y] atual: %d,%d\n", x, y);
-        				desenhaPecas(0, 0, ' ');
-        				desenhaPecas(x_sel, y_sel, 'C');
-        				// jogada = 0;   //troca de jogador
+        				desenhaPecas(0, 0, ' ');    //redesenha as pecas de acordo com a matriz atualizada
+        				desenhaPecas(x_sel, y_sel, 'C');  //desenha posicao da peca que se moveu em cinza
+        				// jogada = 1;   //troca de jogador
                 putc(9, 1, GRAY, GRAY, "");
-                puts(9, 1, BLUE, GRAY, "A");
-      			  }
+                puts(9, 1, RED, GRAY, "V");
+        			  }
+        			  if (jogada == 1) {
+        			    for (int l = 0; l < 12; l++) {
+          					for (int c = 0; c < 1; c++) {
+          						if (pecasVermelhas[l][c] == pecas[0][0] && pecasVermelhas[l][c+1] == pecas[0][1]) {
+          							pecasVermelhas[l][c] = x;
+          							pecasVermelhas[l][c+1] = y;
+          						}
+          						// printf("Matriz Vermelha: %d,%d\n", pecasVermelhas[l][c], pecasVermelhas[l][c+1]);
 
-              jogada = 1 - jogada;
-              printf("Jogador => %d\n", jogada);
+          				  }
+          				}
+
+          				// printf("Matriz pecas: %d,%d\n", pecas[0][0], pecas[0][1]);
+          				// printf("[X,Y] atual: %d,%d\n", x, y);
+          				desenhaPecas(0, 0, ' ');
+          				desenhaPecas(x_sel, y_sel, 'C');
+          				// jogada = 0;   //troca de jogador
+                  putc(9, 1, GRAY, GRAY, "");
+                  puts(9, 1, BLUE, GRAY, "A");
+        			  }
+
+                jogada = 1 - jogada;
+                printf("Jogador => %d\n", jogada);
+              }
           }
 
           putc(15, 15, GRAY, MAGENTA, cor);   //Teste para ver a cor que esta selecionando
