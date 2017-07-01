@@ -50,3 +50,6 @@ Para compilar o projeto base, após abrir o terminal de comandos, é necessário
 navegar até o diretório onde se encontram os arquivos do projeto. O comando
 `make` compila o projeto. O comando `make run` executa a imagem gerada no
 emulador.
+
+### Créditos:
+###### Éverton Kullmann & Tiago Zuege
