@@ -33,7 +33,12 @@ int pecasVermelhas[12][2] = { {24, 19},
 //jogada => 0 --> azul
 //jogada => 1 --> vermelha
 int jogada = 0;
-
+int jog_azul = 0;
+int jog_vermelho = 0;
+int x_az = 0;
+int y_az = 6;
+int x_ve = 62;
+int y_ve = 6;
 void desenhaTela() {
 
 //Tamanho total da tela = 25 L. / 80 COL.
@@ -121,7 +126,13 @@ void desenhaTela() {
   puts(0, 3, YELLOW, GRAY, "Score");
   puts(0, 4, YELLOW, GRAY, "---------");
   puts(0, 5, BLUE, GRAY, "Azul:");
-  puts(0, 6, RED, GRAY, "Vermelho:");
+  puts(62, 1, YELLOW, GRAY, "Jogador:");
+  puts(71, 1, BLUE, GRAY, "A");
+  puts(62, 3, YELLOW, GRAY, "Score");
+  puts(62, 4, YELLOW, GRAY, "---------");
+  puts(62, 5, RED, GRAY, "Vermelho:");
+  puts(61, 23, MAGENTA, GRAY, "Enter -> Seleciona");
+
 }
 
 //desenhaPecas(int x, int y, char cor)
@@ -220,103 +231,69 @@ char verificaCor(int x, int y) {
         if ( (x0 - x1) == 4 || (x0 - x1) == -4 ) {
           if ( (y0 - y1) == -2 ) {
             //Condicao em que peca AZUL move para a ESQUERDA
-  			if ( (x0 - x1) == 4) {
-  				x2 = x1 - 4;
-  				y2 = y1 +2;
-  				printf("X2 = %d\n", x2);
-  				printf("Y2 %d\n", y2);
-  				int mov[1][2] = {{x2, y2}};
-  				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
-          			for (int c = 0; c < 1; c++) {
-                  if (pecasAzuis[l][c] == mov[0][0] && pecasAzuis[l][c+1] == mov[0][1]) {
-                    achouPecaAzulFrente = 1;
-                    printf("Achou azul-frente\n");
-                  }
-                  if (pecasVermelhas[l][c] == mov[0][0] && pecasVermelhas[l][c+1] == mov[0][1]) {
-                    achouPecaVermelhaFrente = 1;
-                    printf("Achou vermelha-frente\n");
-                  }
-        					// printf("Matriz Azul: %d,%d\n", pecasAzuis[l][c], pecasAzuis[l][c+1]);
-          				// if ( (pecasAzuis[l][c] == mov[0][0] && pecasAzuis[l][c+1] == mov[0][1]) && (pecasAzuis[l][c] == x1 && pecasAzuis[l][c+1] == y1) ) {
-      						// 	printf("1o. Azul");
-      						// 	return 0;
-          				// }
+      			if ( (x0 - x1) == 4) {
+      				x2 = x1 - 4;
+      				y2 = y1 +2;
+      				int mov[1][2] = {{x2, y2}};
+      				for (int l = 0; l < 12; l++) {
+              			for (int c = 0; c < 1; c++) {
+    					  if (pecasAzuis[l][c] == mov[0][0] && pecasAzuis[l][c+1] == mov[0][1]) {
+    						achouPecaAzulFrente = 1;
+    					  }
+    					  if (pecasVermelhas[l][c] == mov[0][0] && pecasVermelhas[l][c+1] == mov[0][1]) {
+    						achouPecaVermelhaFrente = 1;
+    					  }
+    					}
+    				}
+      				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
+              			for (int c = 0; c < 1; c++) {
+    					  if (pecasAzuis[l][c] == x1 && pecasAzuis[l][c+1] == y1) {
+    						achouPecaAzulMeio = 1;
+    					  }
+    					  if (pecasVermelhas[l][c] == x1 && pecasVermelhas[l][c+1] == y1) {
+    						achouPecaVermelhaMeio = 1;
+    					  }
+    					}
+    				}
+              if ( (achouPecaVermelhaFrente == 1) && (achouPecaVermelhaMeio == 1) ) { return 0; }
+              if ( (achouPecaVermelhaFrente == 1) && (achouPecaAzulMeio == 1) ) { return 0; }
+              if ( (achouPecaAzulFrente == 1) && (achouPecaAzulMeio == 1) ) { return 0; }
+              if ( (achouPecaAzulFrente == 1) && (achouPecaVermelhaMeio == 1) ) { return 0; }
+              if (achouPecaAzulMeio == 1) { return 0; }
+              if (achouPecaVermelhaMeio == 1 && (x1 == 24 || y1 == 19)) { return 0; }   //Impede comer peca se estiver no limite do tabuleiro
 
-          			}
-      		}
-  				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
-          			for (int c = 0; c < 1; c++) {
-                  if (pecasAzuis[l][c] == x1 && pecasAzuis[l][c+1] == y1) {
-                    achouPecaAzulMeio = 1;
-                    printf("Achou azul-meio\n");
-                  }
-                  if (pecasVermelhas[l][c] == x1 && pecasVermelhas[l][c+1] == y1) {
-                    achouPecaVermelhaMeio = 1;
-                    printf("Achou vermelha-meio\n");
-                  }
-      						// printf("Matriz Vermelha: %d,%d\n", pecasVermelhas[l][c], pecasVermelhas[l][c+1]);
-          				// if ( (pecasVermelhas[l][c] == mov[0][0] && pecasVermelhas[l][c+1] == mov[0][1]) && (pecasVermelhas[l][c] == x1 && pecasVermelhas[l][c+1] == y1) ) {
-      						// 	printf("2o. Azul");
-      						// 	return 0;
-          				// }
-
-          			}
-      		}
-          if ( (achouPecaVermelhaFrente == 1) && (achouPecaVermelhaMeio == 1) ) { return 0; }
-          if ( (achouPecaVermelhaFrente == 1) && (achouPecaAzulMeio == 1) ) { return 0; }
-          if ( (achouPecaAzulFrente == 1) && (achouPecaAzulMeio == 1) ) { return 0; }
-          if ( (achouPecaAzulFrente == 1) && (achouPecaVermelhaMeio == 1) ) { return 0; }
-          if (achouPecaAzulMeio == 1) { return 0; }   //*****
-
-  			}
+      			}
         //Condicao em que peca AZUL move para a DIREITA
   			if ( (x0 - x1) == -4) {
   				x3 = x1 + 4;
   				y3 = y1 +2;
-  				printf("X3 = %d\n", x3);
-  				printf("Y3 %d\n", y3);
   				int mov2[1][2] = {{x3, y3}};
   				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
           			for (int c = 0; c < 1; c++) {
-                  if (pecasAzuis[l][c] == mov2[0][0] && pecasAzuis[l][c+1] == mov2[0][1]) {
-                    achouPecaAzulFrente = 1;
-                    printf("Achou azul-frente\n");
-                  }
-                  if (pecasVermelhas[l][c] == mov2[0][0] && pecasVermelhas[l][c+1] == mov2[0][1]) {
-                    achouPecaVermelhaFrente = 1;
-                    printf("Achou vermelha-frente\n");
-                  }
-      						// printf("Matriz Azul: %d,%d\n", pecasAzuis[l][c], pecasAzuis[l][c+1]);
-          				// if ( (pecasAzuis[l][c] == mov2[0][0] && pecasAzuis[l][c+1] == mov2[0][1]) && (pecasAzuis[l][c] == x1 && pecasAzuis[l][c+1] == y1) ) {
-      						// 	printf("3o. Azul");
-      						// 	return 0;
-          				// }
-
-          			}
-      		}
-  				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
+      					  if (pecasAzuis[l][c] == mov2[0][0] && pecasAzuis[l][c+1] == mov2[0][1]) {
+      						achouPecaAzulFrente = 1;
+      					  }
+      					  if (pecasVermelhas[l][c] == mov2[0][0] && pecasVermelhas[l][c+1] == mov2[0][1]) {
+      						achouPecaVermelhaFrente = 1;
+      					  }
+      					}
+  				}
+  				for (int l = 0; l < 12; l++) {
           			for (int c = 0; c < 1; c++) {
-                  if (pecasAzuis[l][c] == x1 && pecasAzuis[l][c+1] == y1) {
-                    achouPecaAzulMeio = 1;
-                    printf("Achou azul-meio\n");
-                  }
-                  if (pecasVermelhas[l][c] == x1 && pecasVermelhas[l][c+1] == y1) {
-                    achouPecaVermelhaMeio = 1;
-                    printf("Achou vermelha-meio\n");
-                  }
-      						// printf("Matriz Vermelha: %d,%d\n", pecasVermelhas[l][c], pecasVermelhas[l][c+1]);
-          				// if ( (pecasVermelhas[l][c] == mov2[0][0] && pecasVermelhas[l][c+1] == mov2[0][1]) && (pecasVermelhas[l][c] == x1 && pecasVermelhas[l][c+1] == y1) ) {
-      						// 	printf("4o. Azul");
-      						// 	return 0;
-          				// }
-
-          			}
-      		}
+        				  if (pecasAzuis[l][c] == x1 && pecasAzuis[l][c+1] == y1) {
+        					achouPecaAzulMeio = 1;
+        				  }
+        				  if (pecasVermelhas[l][c] == x1 && pecasVermelhas[l][c+1] == y1) {
+        					achouPecaVermelhaMeio = 1;
+        				  }
+      					}
+    			}
           if ( (achouPecaVermelhaFrente == 1) && (achouPecaVermelhaMeio == 1) ) { return 0; }
           if ( (achouPecaVermelhaFrente == 1) && (achouPecaAzulMeio == 1) ) { return 0; }
           if ( (achouPecaAzulFrente == 1) && (achouPecaAzulMeio == 1) ) { return 0; }
           if ( (achouPecaAzulFrente == 1) && (achouPecaVermelhaMeio == 1) ) { return 0; }
-          if (achouPecaAzulMeio == 1) { return 0; }   //*****
+          if (achouPecaAzulMeio == 1) { return 0; }
+          if (achouPecaVermelhaMeio == 1 && (x1 == 52 || y1 == 19) ) { return 0; } //Impede comer peca se estiver no limite do tabuleiro
 
   			}
             return 1;
@@ -325,44 +302,30 @@ char verificaCor(int x, int y) {
       }
 
       if (jogador == 1 && cor == 'V') {
-        printf("X1 (DESTINO) => %d", x1);
-        printf("Y1 (DESTINO) => %d", y1);
         if ( (x0 - x1) == 4 || (x0 - x1) == -4 ) {
           if ( (y0 - y1) == 2 ) {
             //Condicao em que peca VERMELHA move para a ESQUERDA
       			if ( (x0 - x1) == 4) {
       				x2 = x1 - 4;
       				y2 = y1 -2;
-      				printf("X2 = %d\n", x2);
-      				printf("Y2 %d\n", y2);
       				int mov[1][2] = {{x2, y2}};
-      				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
+      				for (int l = 0; l < 12; l++) {
               			for (int c = 0; c < 1; c++) {
-                      if (pecasAzuis[l][c] == mov[0][0] && pecasAzuis[l][c+1] == mov[0][1]) {
-                        achouPecaAzulFrente = 1;
-                        printf("Achou azul-frente\n");
-                      }
-                      if (pecasVermelhas[l][c] == mov[0][0] && pecasVermelhas[l][c+1] == mov[0][1]) {
-                        achouPecaVermelhaFrente = 1;
-                        printf("Achou vermelha-frente\n");
-                      }
-          						// printf("Matriz Azul: %d,%d\n", pecasAzuis[l][c], pecasAzuis[l][c+1]);
-              				// if ( (pecasAzuis[l][c] == mov[0][0] && pecasAzuis[l][c+1] == mov[0][1]) && (pecasAzuis[l][c] == x1 && pecasAzuis[l][c+1] == y1) ) {
-          						// 	printf("1o. Vermelho");
-          						// 	return 0;
-              				// }
-
-              			}
+						  if (pecasAzuis[l][c] == mov[0][0] && pecasAzuis[l][c+1] == mov[0][1]) {
+							achouPecaAzulFrente = 1;
+						  }
+						  if (pecasVermelhas[l][c] == mov[0][0] && pecasVermelhas[l][c+1] == mov[0][1]) {
+							achouPecaVermelhaFrente = 1;
+						  }
+          				}
           		}
               for (int l = 0; l < 12; l++) {
                 for (int c = 0; c < 1; c++) {
                   if (pecasAzuis[l][c] == x1 && pecasAzuis[l][c+1] == y1) {
                     achouPecaAzulMeio = 1;
-                    printf("Achou azul-meio\n");
                   }
                   if (pecasVermelhas[l][c] == x1 && pecasVermelhas[l][c+1] == y1) {
                     achouPecaVermelhaMeio = 1;
-                    printf("Achou vermelha-meio\n");
                   }
                 }
               }
@@ -371,69 +334,40 @@ char verificaCor(int x, int y) {
               if ( (achouPecaAzulFrente == 1) && (achouPecaAzulMeio == 1) ) { return 0; }
               if ( (achouPecaAzulFrente == 1) && (achouPecaVermelhaMeio == 1) ) { return 0; }
               if (achouPecaVermelhaMeio == 1) { return 0; }
+              if (achouPecaAzulMeio == 1 && (x1 == 24 || y1 == 5) ) { return 0; }
 
-        				// for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
-              	// 		for (int c = 0; c < 1; c++) {
-          			// 			printf("Matriz Vermelha: %d,%d\n", pecasVermelhas[l][c], pecasVermelhas[l][c+1]);
-              	// 			if ( (pecasVermelhas[l][c] == mov[0][0] && pecasVermelhas[l][c+1] == mov[0][1]) && (pecasVermelhas[l][c] == x1 && pecasVermelhas[l][c+1] == y1) ) {
-          			// 				printf("2o. Vermelho");
-          			// 				return 0;
-              	// 			}
-                //     }
-                //   }
-                        // if ( (pecasVermelhas[l][c] == mov[0][0] && pecasVermelhas[l][c+1] == mov[0][1]) && (pecasAzuis[l][c] == x1 && pecasAzuis == y1) ) {
-                        //   printf("2o. Vermelho 2");
-                        //   return 0;
       			}
             //Condicao em que peca VERMELHA move para a DIREITA
   			if ( (x0 - x1) == -4) {
   				x3 = x1 + 4;
   				y3 = y1 -2;
-  				printf("X3 = %d\n", x3);
-  				printf("Y3 %d\n", y3);
   				int mov2[1][2] = {{x3, y3}};
   				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
           			for (int c = 0; c < 1; c++) {
-                  if (pecasAzuis[l][c] == mov2[0][0] && pecasAzuis[l][c+1] == mov2[0][1]) {
-                    achouPecaAzulFrente = 1;
-                    printf("Achou azul-frente\n");
-                  }
-                  if (pecasVermelhas[l][c] == mov2[0][0] && pecasVermelhas[l][c+1] == mov2[0][1]) {
-                    achouPecaVermelhaFrente = 1;
-                    printf("Achou vermelha-frente\n");
-                  }
-        					// 	printf("Matriz Azul: %d,%d\n", pecasAzuis[l][c], pecasAzuis[l][c+1]);
-            			// 	if ( (pecasAzuis[l][c] == mov2[0][0] && pecasAzuis[l][c+1] == mov2[0][1]) && (pecasAzuis[l][c] == x1 && pecasAzuis[l][c+1] == y1) ) {
-        					// 		printf("3o. Vermelho");
-        					// 		return 0;
-          				// }
-
+					  if (pecasAzuis[l][c] == mov2[0][0] && pecasAzuis[l][c+1] == mov2[0][1]) {
+						achouPecaAzulFrente = 1;
+					  }
+					  if (pecasVermelhas[l][c] == mov2[0][0] && pecasVermelhas[l][c+1] == mov2[0][1]) {
+						achouPecaVermelhaFrente = 1;
+					  }
           			}
-      		}
+				}
   				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
           			for (int c = 0; c < 1; c++) {
-
-                  if (pecasAzuis[l][c] == x1 && pecasAzuis[l][c+1] == y1) {
-                    achouPecaAzulMeio = 1;
-                    printf("Achou azul-meio\n");
-                  }
-                  if (pecasVermelhas[l][c] == x1 && pecasVermelhas[l][c+1] == y1) {
-                    achouPecaVermelhaMeio = 1;
-                    printf("Achou vermelha-meio\n");
-                  }
-        						// printf("Matriz Vermelha: %d,%d\n", pecasVermelhas[l][c], pecasVermelhas[l][c+1]);
-            				// if ( (pecasVermelhas[l][c] == mov2[0][0] && pecasVermelhas[l][c+1] == mov2[0][1]) && (pecasVermelhas[l][c] == x1 && pecasVermelhas[l][c+1] == y1) ) {
-        						// 	printf("4o. Vermelho");
-        						// 	return 0;
-            				// }
-
-          			}
+					  if (pecasAzuis[l][c] == x1 && pecasAzuis[l][c+1] == y1) {
+						achouPecaAzulMeio = 1;
+					  }
+					  if (pecasVermelhas[l][c] == x1 && pecasVermelhas[l][c+1] == y1) {
+						achouPecaVermelhaMeio = 1;
+					  }
+					}
       		}
           if ( (achouPecaVermelhaFrente == 1) && (achouPecaVermelhaMeio == 1) ) { return 0; }
           if ( (achouPecaVermelhaFrente == 1) && (achouPecaAzulMeio == 1) ) { return 0; }
           if ( (achouPecaAzulFrente == 1) && (achouPecaAzulMeio == 1) ) { return 0; }
           if ( (achouPecaAzulFrente == 1) && (achouPecaVermelhaMeio == 1) ) { return 0; }
           if (achouPecaVermelhaMeio == 1) { return 0; }
+          if (achouPecaAzulMeio == 1 && (x1 == 52 || y1 == 5) ) { return 0; }
 
   			}
             return 1;
@@ -466,7 +400,6 @@ int kmain(void)
 
     desenhaPecas(0, 0, ' ');
     printf("INICIO: Jogador => %d\n", jogada);
-    // puts(1, 1, GREEN, GRAY, "Mensagem de teste 2...");    //puts(posX, posY, cor_frente, cor_fundo, str_a_ser_exibida)
 
     while (1) {
         key = getkey();   //captura tecla digitada
@@ -500,55 +433,152 @@ int kmain(void)
             cor_sel = verificaCor(x_sel, y_sel);
             printf("[X,Y] selecionado: %d,%d\n", x_sel, y_sel);
             puts(1, 23, GRAY, GRAY, "                  ");
+            puts(70, 23, MAGENTA, GRAY, "          ");
+            puts(61, 23, MAGENTA, GRAY, "Enter -> Move");
     			}
 
     		  int pecas[1][2] = {{x_sel, y_sel}};     //armazena em matriz peca a ser movida
+    		  int come[1][2] = {{x, y}};     //armazena em matriz peca a ser movida
+    		  int x_mov = 0;
+    		  int y_mov = 0;
 
           if (enter == 0) {   //se enter == 0 entao esta no modo MOVIMENTO
+            puts(61, 23, MAGENTA, GRAY, "Enter -> Seleciona");
             if ( validaJogada(cor_sel, x_sel, x, y_sel, y, jogada) == 0 ) {
-              // printf("Cor:%c\nx_sel:%d\nx:%d\ny_sel:%d\ny:%d\njogador:%d\n", cor_sel, x_sel, x, y_sel, y, jogada);
               puts(1, 23, MAGENTA, GRAY, "Jogada Invalida!!");
             }
             else {
       			  if (jogada == 0) {   //Se jogada == 0 -> vez do Azul
-
+      					int jog = 0;
         				for (int l = 0; l < 12; l++) {    //atualiza posicao (x,y) da peca que se moveu
         					for (int c = 0; c < 1; c++) {
-        						if (pecasAzuis[l][c] == pecas[0][0] && pecasAzuis[l][c+1] == pecas[0][1]) {
-        							pecasAzuis[l][c] = x;
-        							pecasAzuis[l][c+1] = y;
-        						}
-        						// printf("Matriz Azul: %d,%d\n", pecasAzuis[l][c], pecasAzuis[l][c+1]);
+        						if (pecasAzuis[l][c] == pecas[0][0] && pecasAzuis[l][c+1] == pecas[0][1]){
+    									for (int a = 0; a < 12; a++) {    //atualiza posicao (x,y) da peca que se moveu
+    										for (int b = 0; b < 1; b++) {
+    											if (pecasVermelhas[a][b] == come[0][0] && pecasVermelhas[a][b+1] == come[0][1] && (x_sel -x) == -4 && jog == 0) {
+    												x_mov = x_sel +8;
+    												y_mov = y_sel +4;
+    												pecasAzuis[l][c] = x_mov;
+    												pecasAzuis[l][c+1] = y_mov;
+    												pecasVermelhas[a][b] = x_ve;
+    												pecasVermelhas[a][b+1] = y_ve;
+    												jog = 1;
+    												jog_azul ++;
+    												printf("Vermelho x: %d\n", x_ve);
+    												x_ve = x_ve + 5;
+    												printf("Vermelho x: %d\n", x_ve);
+    												printf("Vermelho y: %d\n", y_ve);
+    												if (x_ve >= 77){
+    													x_ve = 62;
+    													y_ve = y_ve + 2;
+    													printf("Vermelho if x: %d\n", x_ve);
+    													printf("Vermelho if y: %d\n", y_ve);
+    												}
+    											}
+    											if (pecasVermelhas[a][b] == come[0][0] && pecasVermelhas[a][b+1] == come[0][1] && ((x_sel -x) == 4) && jog == 0) {
+    												x_mov = x_sel - 8;
+    												y_mov = y_sel + 4;
+    												pecasAzuis[l][c] = x_mov;
+    												pecasAzuis[l][c+1] = y_mov;
+    												pecasVermelhas[a][b] = x_ve;
+    												pecasVermelhas[a][b+1] = y_ve;
+    												jog = 1;
+    												jog_azul ++;
+    												printf("Vermelho x: %d\n", x_ve);
+    												x_ve = x_ve + 5;
+    												printf("Vermelho x: %d\n", x_ve);
+    												printf("Vermelho y: %d\n", y_ve);
+    												if (x_ve >= 77){
+    													x_ve = 62;
+    													y_ve = y_ve + 2;
+    													printf("Vermelho if x: %d\n", x_ve);
+    													printf("Vermelho if y: %d\n", y_ve);
+    												}
+    											}
+    											if (jog == 0) {
+    												pecasAzuis[l][c] = x;
+    												pecasAzuis[l][c+1] = y;
+    											}
+    										}
+    									}
+								}
         				  }
         				}
 
-        				// printf("Matriz pecas: %d,%d\n", pecas[0][0], pecas[0][1]);
-        				// printf("[X,Y] atual: %d,%d\n", x, y);
         				desenhaPecas(0, 0, ' ');    //redesenha as pecas de acordo com a matriz atualizada
         				desenhaPecas(x_sel, y_sel, 'C');  //desenha posicao da peca que se moveu em cinza
         				// jogada = 1;   //troca de jogador
                 putc(9, 1, GRAY, GRAY, "");
                 puts(9, 1, RED, GRAY, "V");
+        				putc(71, 1, GRAY, GRAY, "");
+                puts(71, 1, RED, GRAY, "V");
         			  }
         			  if (jogada == 1) {
+      						int jog = 0;
         			    for (int l = 0; l < 12; l++) {
           					for (int c = 0; c < 1; c++) {
           						if (pecasVermelhas[l][c] == pecas[0][0] && pecasVermelhas[l][c+1] == pecas[0][1]) {
-          							pecasVermelhas[l][c] = x;
-          							pecasVermelhas[l][c+1] = y;
+          							for (int a = 0; a < 12; a++) {    //atualiza posicao (x,y) da peca que se moveu
+        									for (int b = 0; b < 1; b++) {
+        										if (pecasAzuis[a][b] == come[0][0] && pecasAzuis[a][b+1] == come[0][1] && (x_sel -x) == -4 && jog == 0) {
+        											x_mov = x_sel + 8;
+        											y_mov = y_sel - 4;
+        											pecasVermelhas[l][c] = x_mov;
+        											pecasVermelhas[l][c+1] = y_mov;
+        											pecasAzuis[a][b] = x_az;
+        											pecasAzuis[a][b+1] = y_az;
+        											jog = 1;
+        											jog_vermelho ++;
+        											printf("Azul x: %d\n", x_az);
+        											x_az = x_az + 5;
+        											printf("Azul x: %d\n", x_az);
+        											printf("Azul y: %d\n", y_az);
+        											if (x_az >= 15){
+        												x_az = 0;
+        												y_az ++;
+        												y_az ++;
+        												printf("Azul if x: %d\n", x_az);
+        												printf("Azul if y: %d\n", y_az);
+        											}
+        										}
+        										if (pecasAzuis[a][b] == come[0][0] && pecasAzuis[a][b+1] == come[0][1] && ((x_sel -x) == 4) && jog == 0) {
+        											x_mov = x_sel - 8;
+        											y_mov = y_sel - 4;
+        											pecasVermelhas[l][c] = x_mov;
+        											pecasVermelhas[l][c+1] = y_mov;
+        											pecasAzuis[a][b] = x_az;
+        											pecasAzuis[a][b+1] = y_az;
+        											jog = 1;
+        											jog_vermelho ++;
+        											printf("Azul x: %d\n", x_az);
+        											x_az = x_az + 5;
+        											printf("Azul x: %d\n", x_az);
+        											printf("Azul y: %d\n", y_az);
+        											if (x_az >= 15){
+        												x_az = 0;
+        												y_az ++;
+        												y_az ++;
+        												printf("Azul if x: %d\n", x_az);
+        												printf("Azul if y: %d\n", y_az);
+        											}
+        										}
+        										if (jog == 0) {
+        											pecasVermelhas[l][c] = x;
+        											pecasVermelhas[l][c+1] = y;
+        											//printf("Else\n");
+        										}
+        									}
+									}
           						}
-          						// printf("Matriz Vermelha: %d,%d\n", pecasVermelhas[l][c], pecasVermelhas[l][c+1]);
 
           				  }
           				}
-
-          				// printf("Matriz pecas: %d,%d\n", pecas[0][0], pecas[0][1]);
-          				// printf("[X,Y] atual: %d,%d\n", x, y);
           				desenhaPecas(0, 0, ' ');
           				desenhaPecas(x_sel, y_sel, 'C');
-          				// jogada = 0;   //troca de jogador
                   putc(9, 1, GRAY, GRAY, "");
                   puts(9, 1, BLUE, GRAY, "A");
+        				  putc(71, 1, GRAY, GRAY, "");
+                  puts(71, 1, BLUE, GRAY, "A");
         			  }
 
                 jogada = 1 - jogada;
@@ -556,9 +586,8 @@ int kmain(void)
               }
           }
 
-          putc(15, 15, GRAY, MAGENTA, cor);   //Teste para ver a cor que esta selecionando
+          // putc(15, 15, GRAY, MAGENTA, cor);   //Teste para ver a cor que esta selecionando
         }
-
 
         desenhaPecas(posAntX, posAntY, cor);  //necessario para redesenhar onde cursor passou
         putc(x, y, GREEN, MAGENTA, "");       //coloca o cursor na posicao selecionada
