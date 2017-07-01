@@ -1,4 +1,5 @@
-# Projeto II
+# Projeto II - Arquitetura de Computadores
+## Curso de Eng. da Computação - Bacharelado
 
 Desenvolver um jogo de tabuleiro do tipo damas para PC. O jogo deve ter
 interface semelhante à encontrada em `https://youtu.be/aTIq_8ncurs`. As regras
